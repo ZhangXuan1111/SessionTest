@@ -78,7 +78,7 @@ def singleRequest(startTime, endTime, DialogueID, content):
 
 def multiRequest():
     # 循环请求
-    for m in range(1, 2):
+    for m in range(1, 13):
         monthRange = calendar.monthrange(2023, m)[1]
         sessions_per_day = 33000
         for d in range(1, monthRange):
@@ -86,24 +86,21 @@ def multiRequest():
                 # 达到每天3.3w条会话的量级
                 DialogueID = uuid.uuid4()
                 result = getRandomTimestamp(m, d)
-                startTimestamp = result[0]
-                endTimestamp = result[1]
                 if times < int(sessions_per_day * 0.35):
                     # 会话消息为1-10条
                     len_content = random.randint(0, 10)
                     content = initData.content_10[:len_content]
-                    singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
+                    singleRequest(result[0] * 1000, result[1] * 1000, DialogueID, content)
                 elif times > int(sessions_per_day * 0.5):
                     # 会话消息为 10-30条
                     len_content = random.randint(10, 30)
                     content = initData.content_30[:len_content]
-                    singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
-
+                    singleRequest(result[0] * 1000, result[1] * 1000, DialogueID, content)
                 else:
                     # 会话消息为 30-50条
                     len_content = random.randint(30, 50)
                     content = initData.content_50[:len_content]
-                    singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
+                    singleRequest(result[0] * 1000, result[1] * 1000, DialogueID, content)
 
 
 if __name__ == '__main__':

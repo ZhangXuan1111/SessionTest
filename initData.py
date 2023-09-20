@@ -51,7 +51,7 @@ class GlobalData:
             },
             "Payload": {
                 "Users": self.Users,
-                "SatisfactionResult": 4,
+                "SatisfactionResult": 5,
                 "ChannelMark": "",
             }
         }
