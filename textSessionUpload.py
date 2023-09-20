@@ -74,14 +74,13 @@ def singleRequest(startTime, endTime, DialogueID, content):
     # 发单次请求
     appSecret = '61c3e1f8abe32e2756415f1aa6690827'
     timestamp = str(getTimestamp())
-    # 随机变量1-10，10-30, 30-50
-    Messages = [{} for _ in range(10)]
+    Messages = [{} for _ in range(len(content))]
     for i in range(len(Messages)):
         Messages[i]["MessageID"] = str(DialogueID) + "-" + str(i)
         Messages[i]["MessageTime"] = str(startTime)
         Messages[i]["IsFirstMessage"] = False
         Messages[i]["IsLatestMessage"] = False
-        Messages[i]["Content"] = content
+        Messages[i]["Content"] = content[i]
         if i % 2 == 0:
             Messages[i]["From"] = From[0]
         else:
@@ -121,26 +120,30 @@ def multiRequest():
     # 循环请求
     for m in range(1, 13):
         monthRange = calendar.monthrange(2023, m)[1]
+        sessions_per_day = 33000
         for d in range(1, monthRange):
-            for times in range(33000):
+            for times in range(sessions_per_day):
                 # 达到每天3.3w条会话的量级
                 DialogueID = uuid.uuid4()
                 result = getRandomTimestamp(m, d)
                 startTimestamp = result[0]
                 endTimestamp = result[1]
-                if times < 11550:
+                if times < int(sessions_per_day * 0.35):
                     # 会话消息为1-10条
                     len_content = random.randint(0, 10)
                     content = content_10[:len_content]
                     singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
-                elif times > 16500:
+                elif times > int(sessions_per_day * 0.5):
                     # 会话消息为 10-30条
                     len_content = random.randint(10, 30)
                     content = content_30[:len_content]
                     singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
+
                 else:
                     # 会话消息为 30-50条
                     len_content = random.randint(30, 50)
                     content = content_50[:len_content]
                     singleRequest(startTimestamp * 1000, endTimestamp * 1000, DialogueID, content)
-# multiRequest()
+
+
+multiRequest()
